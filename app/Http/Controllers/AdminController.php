@@ -382,6 +382,43 @@ class AdminController extends Controller
                 return Redirect::to('/show-cart');
             }
 
+            public function add_discount(){
+
+                return view('admin.add_discount');
+            }
+
+            public function save_discount(Request $request){
+
+                   $dis = array();
+
+                   $dis['discount_code'] = $request->discount_code;
+                   $dis['discount_percentage'] = $request->discount_percentage;
+                    
+
+                   DB::table('tbl_discount')
+                      ->insert($dis);
+                  
+                  return Redirect::to('/add-discount');    
+
+
+            }
+
+            public function all_discount(){
+         
+                $discount = DB::table('tbl_discount')
+                                ->select('tbl_discount.*')
+                                ->orderBy('discount_id','asc')
+                                ->get();
+        
+        
+                $manage_discount = view('admin.all_discount')
+                               ->with('discount',$discount);
+                
+                    return view('admin_layout')
+                       ->with('admin.all_discount',$manage_discount);
+          
+              }
+
             
 
 }

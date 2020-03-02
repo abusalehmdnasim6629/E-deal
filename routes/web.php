@@ -140,4 +140,9 @@ Route::get('/getdiscount/{txt}','AdminController@getdiscount');
 Route::post('/addpromo','AdminController@addpromo');
 
 
+//add discount
+Route::get('/add-discount','AdminController@add_discount');
+Route::post('/save-discount','Admincontroller@save_discount');
+Route::get('all-discount','AdminController@all_discount');
+
 

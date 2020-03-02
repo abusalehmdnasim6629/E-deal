@@ -253,12 +253,13 @@
 				<div class="row">
 					<div class="col-sm-2">
 						<div class="companyinfo">
-							<h2><span>E</span>-Deal</h2>
+							<h2><span>Delivary</span>-Man</h2>
 							<p>Biggest E-Commerce Site In Bangladesh</p>
 						</div>
 					</div>
 					<div class="col-sm-7">
-					<h3>Delivary man</h3>
+                      
+					
 
 						<?php
 						   $all_delivaryman = DB::table('tbl_delivaryman')
@@ -269,7 +270,7 @@
 						
 						
 						   foreach($all_delivaryman as $cc){  ?>
-						   <div class="col-sm-3">
+						   <div class="col-sm-3" style="margin_top:10px;">
 							<div class="photo-gallery text-center">
 								<a href="{{url('/')}}">
 									
