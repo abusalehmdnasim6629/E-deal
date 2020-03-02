@@ -17,7 +17,7 @@ class OrderController extends Controller
         ->join('tbl_customer','tbl_order.customer_id','=','tbl_customer.customer_id') 
         
         ->select('tbl_order.*','tbl_customer.customer_name','tbl_customer.customer_id')
-  
+         
         ->orderBy('order_id','asc')
         ->get();
 
@@ -32,7 +32,7 @@ class OrderController extends Controller
             }
 
 
-       public function order_details($order_id){
+    public function order_details($order_id){
 
                      
                     $all_customer_info = DB::table('tbl_order')
@@ -64,7 +64,13 @@ class OrderController extends Controller
         DB::table('tbl_order')
         ->where('order_id',$order_id)
         ->delete(); 
-        Session::put('messege','delete order successfully!!..');
+        
+        DB::table('tbl_order_details')
+        ->where('order_id',$order_id)
+        ->delete(); 
+		
+
+        
         return Redirect::to('/manage-order');
     }
 }

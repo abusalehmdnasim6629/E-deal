@@ -340,11 +340,48 @@
 						<li><a href="{{URL::to('/add-category')}}"><i class="icon-tasks"></i><span class="hidden-tablet">Add Category</span></a></li>
 						<li><a href="{{URL::to('/all-brand')}}"><i class="icon-eye-open"></i><span class="hidden-tablet">All Brands</span></a></li>
 						<li><a href="{{URL::to('/add-brand')}}"><i class="icon-dashboard"></i><span class="hidden-tablet">Add Brand</span></a></li>
+						<li><a href="{{URL::to('/purchase')}}"><i class="icon-dashboard"></i><span class="hidden-tablet">Purchase</span></a></li>
+						<li><a href="{{URL::to('/stock')}}"><i class="icon-dashboard"></i><span class="hidden-tablet">Stock</span></a></li>
+						<li><a href="{{URL::to('/report')}}"><i class="icon-dashboard"></i><span class="hidden-tablet">Daily report </span></a></li>
 						<li>
 							<a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> Products</span><span class="label label-important"> New </span></a>
 							<ul>
 								<li><a class="submenu" href="{{URL::to('/all-product')}}"><i class="icon-file-alt"></i><span class="hidden-tablet">All products</span></a></li>
 								<li><a class="submenu" href="{{URL::to('/add-product')}}"><i class="icon-file-alt"></i><span class="hidden-tablet">Add product</span></a></li>
+								
+							</ul>	
+						</li>
+
+						<li>
+							<a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet">Discount</span><span class="label label-important"> New </span></a>
+							<ul>
+								<li><a class="submenu" href="{{URL::to('/all-discount')}}"><i class="icon-file-alt"></i><span class="hidden-tablet">All discount</span></a></li>
+								<li><a class="submenu" href="{{URL::to('/add-discount')}}"><i class="icon-file-alt"></i><span class="hidden-tablet">Add discount cupon</span></a></li>
+								
+							</ul>	
+						</li>
+						<li>
+							<a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet">Sell info</span><span class="label label-important"> New </span></a>
+							<ul>
+								<li><a class="submenu" href="{{URL::to('/show-sell-info')}}"><i class="icon-file-alt"></i><span class="hidden-tablet">All sell</span></a></li>
+								<li><a class="submenu" href="{{URL::to('/sell')}}"><i class="icon-file-alt"></i><span class="hidden-tablet">Add sell</span></a></li>
+								
+							</ul>	
+						</li>
+
+						<li>
+							<a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet">Vendor</span><span class="label label-important"> New </span></a>
+							<ul>
+								<li><a class="submenu" href="{{URL::to('/all-vendor')}}"><i class="icon-file-alt"></i><span class="hidden-tablet">All vendors</span></a></li>
+								<li><a class="submenu" href="{{URL::to('/add-vendor')}}"><i class="icon-file-alt"></i><span class="hidden-tablet">Add vendor</span></a></li>
+								
+							</ul>	
+						</li>
+						<li>
+							<a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet">Cost</span><span class="label label-important"> New </span></a>
+							<ul>
+								<li><a class="submenu" href="{{URL::to('/all-cost')}}"><i class="icon-file-alt"></i><span class="hidden-tablet">All cost</span></a></li>
+								<li><a class="submenu" href="{{URL::to('/add-cost')}}"><i class="icon-file-alt"></i><span class="hidden-tablet">Add cost</span></a></li>
 								
 							</ul>	
 						</li>

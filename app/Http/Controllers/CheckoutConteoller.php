@@ -21,22 +21,7 @@ class CheckoutConteoller extends Controller
 
    public function customer_registration(Request $request){
 
-                    $validator = Validator::make(
-
-                        array('customer_name' => 'required'),
-                        array('email_address' => 'required|email|unique:tbl_customer'),
-                        array('mobile_number' => 'required|unique:tbl_customer'),
-                        array('password' => 'required')
-                        
-
-                );
-                
-                if($validator->fails()){
-                    Session::put('ms','Please fill the blanks with valid items');
-
-                    return Redirect()->back()->withErrors($validator)->withInput();
-                }
-
+                   
 
 
                 $cd= array();
@@ -47,6 +32,8 @@ class CheckoutConteoller extends Controller
                 $cd['password']  = md5($request->password);
                 $customer_id = DB::table('tbl_customer')
                     ->insertGetId($cd);
+
+                  
                 Session::put('customer_id',$customer_id);
                 Session::put('customer_name',$request->customer_name);
                 return Redirect::to('/checkout');
@@ -82,35 +69,37 @@ class CheckoutConteoller extends Controller
    }
    public function customer_login(Request $request){
     
-    $validator = Validator::make(
+            //     $validator = Validator::make(
 
-        array('email_address' => 'required|email'),
-        array('password' => 'required')
-        
+            //         array('email_address' => 'required|email'),
+            //         array('password' => 'required')
+                    
 
-  );
-  
-  if($validator->fails()){
-      Session::put('m','Invalid login');
+            //     );
+            
+            // if($validator->fails()){
+            //     Session::put('m','Invalid login');
 
-      return Redirect()->back()->withErrors($validator)->withInput();
-  }
+            //     return Redirect()->back()->withErrors($validator)->withInput();
+            // }
     
     
-    $email = $request->email_address;
-    $password = md5($request->password);
-    $customer_details = DB::table('tbl_customer')
-        ->where('email_address',$email)
-        ->where('password',$password)
-        ->first();
-     if($customer_details != NULL){
-        Session::put('customer_id',$customer_details->customer_id);
-        Session::put('customer_name',$customer_details->customer_name);
-        return Redirect::to('/checkout');
-     }else{
-        
-        return Redirect::to('/login-check');
-     }   
+            $email = $request->email_address;
+            $password = md5($request->password);
+            $customer_details = DB::table('tbl_customer')
+                ->where('email_address',$email)
+                ->where('password',$password)
+                ->first();
+
+            
+            if($customer_details != NULL){
+                Session::put('customer_id',$customer_details->customer_id);
+                Session::put('customer_name',$customer_details->customer_name);
+                return Redirect::to('/checkout');
+            }else{
+                
+                return Redirect::to('/login-check');
+            }   
     
 
     }
@@ -130,7 +119,7 @@ class CheckoutConteoller extends Controller
     public function order_place(Request $request){
 
         $payment_method = $request->payment_method;
-        $payment = array() ;
+        $payment = array();
         $payment['payment_method'] = $payment_method;
         $payment['payment_status'] = 'pendding';
         $payment_id = DB::table('tbl_payment')
@@ -150,7 +139,9 @@ class CheckoutConteoller extends Controller
             $q = $to->quantity;
             $total = $p*$q;
             $subtotal = $subtotal +$total;
-            $sum = $tax + $subtotal;
+            $d = Session::get('dis');
+            $sum2 = $subtotal - ($subtotal*($d/100));
+            $sum = $tax + $sum2;
 
 
 
@@ -173,12 +164,16 @@ class CheckoutConteoller extends Controller
               ->insert($oddata);
         }  
         if($payment_method == 'handcash'){
+            Session::put('dis',null);
             return view('pages.order_success');
         }elseif($payment_method == 'card'){
+            Session::put('dis',null);
             return view('pages.order_success');
         }elseif($payment_method == 'bkash'){
+            Session::put('dis',null);
             return view('pages.order_success');
         }else{
+            Session::put('dis',null);
             echo 'not match';
         }    
 
