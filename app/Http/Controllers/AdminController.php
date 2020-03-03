@@ -418,7 +418,92 @@ class AdminController extends Controller
                        ->with('admin.all_discount',$manage_discount);
           
               }
+               
+
+              public function link(){
+
+
+                return view('admin.add_link');
+              }
+
+
+              public function save_link(Request $request){
+
+                $link = array();
+
+                $link['link_name'] = $request->link_name;
+                $link['link_address'] = $request->link_address;
+                 
+
+                DB::table('tbl_link')
+                   ->insert($link);
+               
+               return Redirect::to('/add-link');    
+
+
+         }
+
+         public function all_link(){
+         
+            $link = DB::table('tbl_link')
+                            ->select('tbl_link.*')
+                            ->orderBy('link_id','asc')
+                            ->get();
+    
+    
+            $manage_link = view('admin.all_link')
+                           ->with('link',$link);
+            
+                return view('admin_layout')
+                   ->with('admin.all_link',$manage_link);
+      
+          }
 
             
+          public function delete_link($link_id){
+
+            DB::table('tbl_link')
+            ->where('link_id',$link_id)
+            ->delete();
+      
+            return Redirect::to('/all-link');
+   }
+
+            public function add_email_phone(){
+
+
+                return view('admin.company_email_phone');
+            }
+
+            public function save_contact(Request $request){
+                 
+                $con = array();
+
+                $con['cmp_email'] = $request->company_email;
+                $con['cmp_phone'] = $request->company_phone;
+
+                DB::table('tbl_cmp_contact')->insert($con);
+
+                return Redirect::to('/add-contact');
+
+
+
+            }
+
+            public function all_contact(){
+         
+                $con = DB::table('tbl_cmp_contact')
+                                ->select('tbl_cmp_contact.*')
+                                ->orderBy('cmp_id','asc')
+                                ->get();
+        
+        
+                $manage_con = view('admin.all_cmp_contact')
+                               ->with('con',$con);
+                
+                    return view('admin_layout')
+                       ->with('admin.all_cmp_contact',$manage_con);
+          
+              }
 
 }

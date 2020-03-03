@@ -393,8 +393,16 @@
 								
 							</ul>	
 						</li>
-						
-						<li><a href="chart.html"><i class="icon-list-alt"></i><span class="hidden-tablet">Social Links</span></a></li>
+						<li>
+							<a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet">Company</span><span class="label label-important"> New </span></a>
+							<ul>
+								<li><a class="submenu" href="{{URL::to('/all-contact')}}"><i class="icon-file-alt"></i><span class="hidden-tablet">All contact</span></a></li>
+								<li><a class="submenu" href="{{URL::to('/add-contact')}}"><i class="icon-file-alt"></i><span class="hidden-tablet">Add contact</span></a></li>
+								
+							</ul>	
+						</li>
+						<li><a href="{{URL::to('/add-link')}}"><i class="icon-list-alt"></i><span class="hidden-tablet">Add Social Links</span></a></li>
+						<li><a href="{{URL::to('/all-link')}}"><i class="icon-list-alt"></i><span class="hidden-tablet">All Social Links</span></a></li>
 						<li><a href="{{URL::to('/manage-order')}}"><i class="icon-list-alt"></i><span class="hidden-tablet">Manage order</span></a></li>
 						<li><a href="typography.html"><i class="icon-font"></i><span class="hidden-tablet">Shop name</span></a></li>
 						<li>

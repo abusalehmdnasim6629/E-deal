@@ -145,4 +145,15 @@ Route::get('/add-discount','AdminController@add_discount');
 Route::post('/save-discount','Admincontroller@save_discount');
 Route::get('all-discount','AdminController@all_discount');
 
+//link
+Route::get('/add-link','AdminController@link');
+Route::post('/save-link','AdminController@save_link');
+Route::get('/all-link','AdminController@all_link');
+Route::get('/delete-link/{link_id}','AdminController@delete_link');
+
+//company email phone
+Route::get('/add-contact','AdminController@add_email_phone');
+Route::post('/save-contact','AdminController@save_contact');
+Route::get('/all-contact','AdminController@all_contact');
+
 

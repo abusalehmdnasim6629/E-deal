@@ -32,17 +32,70 @@
 					<div class="col-sm-6">
 						<div class="contactinfo">
 							<ul class="nav nav-pills">
-								<li><a href="#"><i class="fa fa-phone"></i> +8801959031119</a></li>
-								<li><a href="#"><i class="fa fa-envelope"></i> asmnasim@hotmail.com</a></li>
+
+							<?php 
+							  $email =  DB::table('tbl_cmp_contact')
+										->select('tbl_cmp_contact.cmp_email')
+										->limit(1)
+										->get();
+
+							$phone =  DB::table('tbl_cmp_contact')
+										->select('tbl_cmp_contact.cmp_phone')
+										->limit(1)
+										->get();			
+
+					       ?>			
+						       <?php foreach($phone as $p){ ?>		
+								<li><a href="#"><i class="fa fa-phone"></i>{{$p->cmp_phone}}</a></li>
+								<?php } ?>	
+
+								<?php foreach($email as $e){ ?>		
+								<li><a href="#"><i class="fa fa-envelope"></i>{{$e->cmp_email}}</a></li>
+								<?php } ?>	
+
+							
 							</ul>
 						</div>
 					</div>
 					<div class="col-sm-6">
 						<div class="social-icons pull-right">
 							<ul class="nav navbar-nav">
-								<li><a href="https://www.facebook.com/sk.nasim.7921"><i class="fa fa-facebook"></i></a></li>
-								<li><a href="https://twitter.com/asmnasim1"><i class="fa fa-twitter"></i></a></li>
-								<li><a href="https://www.linkedin.com/in/asm-nasim-418197140/"><i class="fa fa-linkedin"></i></a></li>
+							<?php 
+							  $fa =  DB::table('tbl_link')
+										->select('tbl_link.*')
+										->where('link_name','LIKE','%'.'facebook'.'%')
+										->limit(1)
+										->get();
+							
+							 $tw =  DB::table('tbl_link')
+										->select('tbl_link.*')
+										->where('link_name','LIKE','%'.'twitter'.'%')
+										->limit(1)
+										->get();
+										
+							$lin =  DB::table('tbl_link')
+										->select('tbl_link.*')
+										->where('link_name','LIKE','%'.'linkedin'.'%')
+										->limit(1)
+										->get();
+							
+							
+							?>
+							   <?php foreach($fa as $f){ ?>
+								<li><a href="{{url::to($f->link_address)}}" target="_blank"><i class="fa fa-facebook"></i></a></li>
+
+							   <?php } ?>
+
+							   <?php foreach($tw as $t){ ?>
+								<li><a href="{{url::to($t->link_address)}}" target="_blank"><i class="fa fa-twitter" ></i></a></li>
+
+							   <?php } ?>
+
+							   <?php foreach($lin as $l){ ?>
+								<li><a href="{{url::to($l->link_address)}}" target="_blank"><i class="fa fa-linkedin"></i></a></li>
+
+							   <?php } ?>
+								
 							</ul>
 						</div>
 					</div>
