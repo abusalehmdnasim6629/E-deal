@@ -1,6 +1,8 @@
 @extends('welcome')
 @section('content')
 
+@include('sweetalert::alert')
+@include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
 
 
 <h2 class="title text-center">Features Items</h2>
@@ -12,20 +14,20 @@
 										<img src="{{ $pp->product_image}}" style="height:100px;width:100px" alt="" />
 										<h2>{{ $pp->product_price}} tk</h2>
 										<p>{{ $pp->product_name}}</p>
-										<a href="{{URL::to('/view-product/'.$pp->product_id)}}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+										<a href="{{URL::to('/view-product/'.$pp->product_code)}}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
 									</div>
 									<div class="product-overlay">
 										<div class="overlay-content">
 											<h2>{{ $pp->product_price}}</h2>
 											<p>{{ $pp->product_name}}</p>
-											<a href="{{URL::to('/view-product/'.$pp->product_id)}}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+											<a href="{{URL::to('/view-product/'.$pp->product_code)}}" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
 										</div>
 									</div>
 								</div>
 								<div class="choose">
 									<ul class="nav nav-pills nav-justified">
 										<li><a href="#"><i class="fa fa-plus-square"></i>{{ $pp->manufacture_name}}</a></li>
-										<li><a href="{{URL::to('/view-product/'.$pp->product_id)}}"><i class="fa fa-plus-square"></i>View product</a></li>
+										<li><a href="{{URL::to('/view-product/'.$pp->product_code)}}"><i class="fa fa-plus-square"></i>View product</a></li>
 									</ul>
 								</div>
 							</div>

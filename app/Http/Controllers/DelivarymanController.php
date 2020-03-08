@@ -14,7 +14,7 @@ session_start();
 class DelivarymanController extends Controller
 {
     public function add_delivaryman(Request $request){
-
+               $this->authcheck();
                return view('admin.delivaryman_manage');
 
     }
@@ -65,7 +65,7 @@ class DelivarymanController extends Controller
 
     public function all_delivaryman(){
          
-     
+        $this->authcheck();
         $all_delivaryman_info = DB::table('tbl_delivaryman')
                         
                         ->select('tbl_delivaryman.*')
@@ -86,7 +86,7 @@ class DelivarymanController extends Controller
       public function deactive_delivaryman($delivaryman_id)
       {
    
-         
+        $this->authcheck();
         DB::table('tbl_delivaryman')
               ->where('delivaryman_id', $delivaryman_id)
               ->update(['publication_status'=>0]);
@@ -99,7 +99,7 @@ class DelivarymanController extends Controller
 
       public function active_delivaryman($delivaryman_id)
       {
-         
+        $this->authcheck();
          DB::table('tbl_delivaryman')
              ->where('delivaryman_id',$delivaryman_id)
              ->update(['publication_status'=>1]);
@@ -118,5 +118,14 @@ class DelivarymanController extends Controller
           Session::put('messege','delete delivaryman successfully!!..');
           return Redirect::to('/all-delivaryman');
       }
-  
+      public function authcheck(){
+        $admin_id =Session::get('admin_id');
+        if($admin_id){
+          return;
+        }else{
+            return Redirect::to('/admin')->send();
+        }
+
+
+    }
 }

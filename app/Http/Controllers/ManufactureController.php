@@ -13,12 +13,13 @@ session_start();
 class ManufactureController extends Controller
 {
     public function index(){
-
+        $this->authcheck();
         return view('admin.add_brand');
     }
 
     public function save_brand(Request $request)
     {
+        $this->authcheck();
         $data= array();
         $data['manufacture_id'] = $request->manufacture_id;
         $data['manufacture_name'] = $request->manufacture_name;
@@ -34,7 +35,7 @@ class ManufactureController extends Controller
 
     public function all_brand(){
          
-
+        $this->authcheck();
         $all_manufacture_info = DB::table('tbl_manufacture')->get();
         $manage_manufacture = view('admin.all_brand')
                        ->with('all_manufacture_info',$all_manufacture_info);
@@ -46,6 +47,7 @@ class ManufactureController extends Controller
     
     public function deactive_brand($manufacture_id)
     {
+        $this->authcheck();
       DB::table('tbl_manufacture')
            ->where('manufacture_id',$manufacture_id)
            ->update(['publication_status'=>0]);
@@ -56,6 +58,7 @@ class ManufactureController extends Controller
 
     public function active_brand($manufacture_id)
     {
+        $this->authcheck();
       DB::table('tbl_manufacture')
            ->where('manufacture_id',$manufacture_id)
            ->update(['publication_status'=>1]);
@@ -66,6 +69,7 @@ class ManufactureController extends Controller
 
     public function edit_brand($manufacture_id)
     {
+        $this->authcheck();
         $manufacture_info = DB::table('tbl_manufacture')
         ->where('manufacture_id',$manufacture_id)
         ->first();
@@ -78,6 +82,7 @@ class ManufactureController extends Controller
 
     public function update_brand(Request $request, $manufacture_id)
     {   
+        $this->authcheck();
         $data = array();
         $data['manufacture_name'] = $request->manufacture_name;
         $data['manufacture_description'] = $request->manufacture_description;
@@ -93,10 +98,20 @@ class ManufactureController extends Controller
 
     public function delete_brand($manufacture_id)
     {
+        $this->authcheck();
         DB::table('tbl_manufacture')
         ->where('manufacture_id',$manufacture_id)
         ->delete(); 
         Session::put('messege','delete brand successfully!!..');
         return Redirect::to('/all-brand');
+    }
+
+    public function authcheck(){
+        $admin_id =Session::get('admin_id');
+        if($admin_id){
+          return;
+        }else{
+            return Redirect::to('/admin')->send();
+        }
     }
 }

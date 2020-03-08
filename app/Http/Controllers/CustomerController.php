@@ -13,7 +13,7 @@ session_start();
 class CustomerController extends Controller
 {
     public function all_customer(){
-         
+         $this->authcheck();
   
         $all_customer_info = DB::table('tbl_customer')
                         
@@ -35,10 +35,19 @@ class CustomerController extends Controller
       public function delete_customer($customer_id)
     {
     
+        $this->authcheck();
         DB::table('tbl_customer')
         ->where('customer_id',$customer_id)
         ->delete(); 
         Session::put('messege','delete customer successfully!!..');
         return Redirect::to('/all-customer');
+    }
+    public function authcheck(){
+        $admin_id =Session::get('admin_id');
+        if($admin_id){
+          return;
+        }else{
+            return Redirect::to('/admin')->send();
+        }
     }
 }

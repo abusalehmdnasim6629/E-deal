@@ -1,6 +1,7 @@
 @extends('welcome')
 @section('content')
-
+@include('sweetalert::alert')
+@include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
 <section id="form"><!--form-->
 		<div class="container">
 			<div class="row">
@@ -33,18 +34,19 @@
 
 					<p class="alert-danger">
 					<?php
-					$message = Session::get('ms');
+					$message = Session::get('logalert');
 					if($message){
                         echo "$message";
-						Session::put('ms',null);
+						Session::put('logalert',null);
 					}
 					?>
 					</p>
+
 						<h2>New User Signup!</h2>
 						<form action="{{url('/customer-registration')}}" method="post">
                           {{ csrf_field() }}
 							<input type="text" name="customer_name" placeholder="Name" require=""/>
-							<input type="email" name="email_address" placeholder="Email Address"require=""/>
+							<input type="email" name="email_address" placeholder="Email Address" require=""/>
                             <input type="text" name="mobile_number" placeholder="Mobile number"require=""/>
                            
                             <input type="password" name="password" placeholder="Password"require=""/>

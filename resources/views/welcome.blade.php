@@ -22,6 +22,7 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{URL::to('frontend/images/ico/apple-touch-icon-114-precomposed.png')}}">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{URL::to('frontend/images/ico/apple-touch-icon-72-precomposed.png')}}">
     <link rel="apple-touch-icon-precomposed" href="{{URL::to('frontend/images/ico/apple-touch-icon-57-precomposed.png')}}">
+    
 </head><!--/head-->
 
 <body>
@@ -107,14 +108,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-4">
-						<div class="logo pull-left">
-							<a href="index.html"><img src="images/home/logo.png" alt="" /></a>
-						</div>
-						<div class="btn-group pull-right">
-						            <h1><span>E</span>-DEAL</h1>
-									<h2>Biggest E-Commerce Site In Bangladesh</h2>
-									
-						</div>
+						
 					</div>
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
@@ -203,10 +197,6 @@
 						</div>
 					</div>
 
-					
-
-
-
 					<div class="col-sm-3">
 						<div class="search_box pull-right" style="width:200px;">
 						    <form action="{{url('/search')}}" method="post">
@@ -220,6 +210,8 @@
 		</div><!--/header-bottom-->
 	</header><!--/header-->
 	
+	
+
 	<section>
 		<div class="container">
 			<div class="row">

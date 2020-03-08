@@ -12,7 +12,7 @@ session_start();
 class OrderController extends Controller
 {
     public function manage_order(){
-
+         $this->authcheck();
         $all_order_info = DB::table('tbl_order')
         ->join('tbl_customer','tbl_order.customer_id','=','tbl_customer.customer_id') 
         
@@ -33,8 +33,8 @@ class OrderController extends Controller
 
 
     public function order_details($order_id){
-
-                     
+                  
+        $this->authcheck();
                     $all_customer_info = DB::table('tbl_order')
                                     ->join('tbl_customer','tbl_order.customer_id','=','tbl_customer.customer_id')  
                                     ->join('tbl_shipping','tbl_order.shipping_id','=','tbl_shipping.shipping_id') 
@@ -60,7 +60,7 @@ class OrderController extends Controller
        }     
  public function delete_order($order_id)
     {
-        
+        $this->authcheck();
         DB::table('tbl_order')
         ->where('order_id',$order_id)
         ->delete(); 
@@ -72,5 +72,16 @@ class OrderController extends Controller
 
         
         return Redirect::to('/manage-order');
+    }
+
+    public function authcheck(){
+        $admin_id =Session::get('admin_id');
+        if($admin_id){
+          return;
+        }else{
+            return Redirect::to('/admin')->send();
+        }
+
+
     }
 }

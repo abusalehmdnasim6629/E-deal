@@ -1,6 +1,46 @@
 @extends('welcome')
 @section('content')
+<style>
 
+.rate {
+    float: left;
+    height: 46px;
+    padding: 0 10px;
+}
+.rate:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+}
+.rate:not(:checked) > label {
+    float:right;
+    width:1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:30px;
+    color:#ccc;
+}
+.rate:not(:checked) > label:before {
+    content: '★ ';
+}
+.rate > input:checked ~ label {
+    color: #ffc700;    
+}
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+    color: #deb217;  
+}
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
+    color: #c59b08;
+}
+
+
+
+</style>
 <div class="col-sm-9 padding-right">
 					<div class="product-details"><!--product-details-->
 						<div class="col-sm-5">
@@ -47,7 +87,20 @@
 								
 							</div><!--/product-information-->
 						</div>
-					</div><!--/product-details-->
+
+						<div class="rate">
+							<input type="radio" id="star5" name="rate" value="5" />
+							<label for="star5" title="text">5 stars</label>
+							<input type="radio" id="star4" name="rate" value="4" />
+							<label for="star4" title="text">4 stars</label>
+							<input type="radio" id="star3" name="rate" value="3" />
+							<label for="star3" title="text">3 stars</label>
+							<input type="radio" id="star2" name="rate" value="2" />
+							<label for="star2" title="text">2 stars</label>
+							<input type="radio" id="star1" name="rate" value="1" />
+							<label for="star1" title="text">1 star</label>
+						</div>
+						</div><!--/product-details-->
 					
 					<div class="category-tab shop-details-tab"><!--category-tab-->
 						<div class="col-sm-12">
@@ -222,14 +275,15 @@
 									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
 									<p><b>Write Your Review</b></p>
 									
-									<form action="#">
+									<form action="{{url('/send-review')}}" method="post" enctype="multipart/form-data">
+									        {{ csrf_field() }}
 										<span>
-											<input type="text" placeholder="Your Name"/>
-											<input type="email" placeholder="Email Address"/>
+											<input type="text" name="rname" required="" placeholder="Enter subject"/>
+											<input type="email" name="rmail" required="" placeholder="Email Address"/>
 										</span>
-										<textarea name="" ></textarea>
-										<b>Rating: </b> <img src="images/product-details/rating.png" alt="" />
-										<button type="button" class="btn btn-default pull-right">
+										<textarea name="sms" ></textarea>
+										
+										<button type="submit" class="btn btn-default pull-right">
 											Submit
 										</button>
 									</form>

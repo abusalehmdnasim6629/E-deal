@@ -127,7 +127,7 @@
 					{{csrf_field()}}
 					   <input type="radio" name="payment_method" value="handcash">Hand cash <br>
 					   <input type="radio" name="payment_method" value="card">Debit card <br>
-					   <input type="radio" name="payment_method" value="bkash">Bkash <br>
+					   
 					   <input type="submit" name="submit" value="Order" class="btn btn-success">
 					
 					

@@ -80,20 +80,22 @@ class HomeController extends Controller
 
     
 
-    public function view_product($product_id){
+    public function view_product($product_code){
 
         $view_product = DB::table('tbl_product')
         ->join('tbl_category','tbl_product.category_id','=','tbl_category.category_id') 
         ->join('tbl_manufacture','tbl_product.manufacture_id','=','tbl_manufacture.manufacture_id')
         ->select('tbl_product.*','tbl_category.category_name','tbl_manufacture.manufacture_name')
-        ->where('tbl_product.product_id',$product_id)
+        ->where('tbl_product.product_code',$product_code)
         ->where('tbl_product.publication_status',1)
         ->first();
 
 
-
+         Session::put('pid',$view_product->product_id);
         $manage_view_product = view('pages.view_product')
             ->with('view_product',$view_product);
+
+       
 
         return view('welcome')
         ->with('pages.view_product',$manage_view_product);

@@ -33,7 +33,7 @@ class ProductController extends Controller
         $data['product_size'] = $request->product_size;
         $data['product_color'] = $request->product_color;
         $data['publication_status'] = $request->publication_status;  
-        
+        $data['product_code'] = Str::random(5);
         
         
 

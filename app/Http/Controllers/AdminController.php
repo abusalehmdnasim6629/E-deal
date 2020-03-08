@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Session;
+use App\Mail\SendMail;
+use Mail;
 session_start();
 
 class AdminController extends Controller
@@ -86,7 +88,7 @@ class AdminController extends Controller
     
     public function addvendor(){
 
-
+         $this->authcheck();
         return view('admin.add_vendor');
     }
 
@@ -108,7 +110,7 @@ class AdminController extends Controller
 
 
         public function all_vendor(){
-            
+            $this->authcheck();
             $vendor = DB::table('tbl_vendor')
                     ->select('tbl_vendor.*')
                     ->get();
@@ -131,7 +133,7 @@ class AdminController extends Controller
 
         public function purchase(){
 
-
+            $this->authcheck();
             return view('admin.purchase');
         }
 
@@ -196,7 +198,7 @@ class AdminController extends Controller
             }
        
             public function all_stock(){
-         
+                $this->authcheck();
                 $all_product_info = DB::table('tbl_pur')
                                 ->join('tbl_product','tbl_pur.p_code','=','tbl_product.product_id')
                                 ->select('tbl_pur.*','tbl_product.product_name')
@@ -214,7 +216,7 @@ class AdminController extends Controller
               }
 
               public function sell(){
-
+                $this->authcheck();
                 return view('admin.sell');
             }
 
@@ -260,7 +262,7 @@ class AdminController extends Controller
 
             public function showSellInfo()
             {
-
+                $this->authcheck();
                 $t_date = date("Y-m-d");
                 
 
@@ -296,7 +298,7 @@ class AdminController extends Controller
             }
 
             public function cost(){
-
+                $this->authcheck();
                 return view('admin.add_cost');
             }
 
@@ -320,7 +322,7 @@ class AdminController extends Controller
        }
 
        public function all_cost(){
-         
+        $this->authcheck();
         $all_cost_info = DB::table('tbl_cost')
                         ->select('tbl_cost.*')
                         ->orderBy('cost_id','asc')
@@ -337,7 +339,7 @@ class AdminController extends Controller
 
       public function report(){
 
-
+        $this->authcheck();
         return view('admin.report');
       }
 
@@ -378,12 +380,12 @@ class AdminController extends Controller
             }
 
             public function addpromo(){
-
+                
                 return Redirect::to('/show-cart');
             }
 
             public function add_discount(){
-
+                $this->authcheck();
                 return view('admin.add_discount');
             }
 
@@ -404,7 +406,7 @@ class AdminController extends Controller
             }
 
             public function all_discount(){
-         
+                $this->authcheck();
                 $discount = DB::table('tbl_discount')
                                 ->select('tbl_discount.*')
                                 ->orderBy('discount_id','asc')
@@ -422,7 +424,7 @@ class AdminController extends Controller
 
               public function link(){
 
-
+                $this->authcheck();
                 return view('admin.add_link');
               }
 
@@ -445,6 +447,7 @@ class AdminController extends Controller
 
          public function all_link(){
          
+            $this->authcheck(); 
             $link = DB::table('tbl_link')
                             ->select('tbl_link.*')
                             ->orderBy('link_id','asc')
@@ -471,7 +474,7 @@ class AdminController extends Controller
 
             public function add_email_phone(){
 
-
+                $this->authcheck();
                 return view('admin.company_email_phone');
             }
 
@@ -491,7 +494,7 @@ class AdminController extends Controller
             }
 
             public function all_contact(){
-         
+                $this->authcheck();
                 $con = DB::table('tbl_cmp_contact')
                                 ->select('tbl_cmp_contact.*')
                                 ->orderBy('cmp_id','asc')
@@ -506,4 +509,45 @@ class AdminController extends Controller
           
               }
 
+              public function sendReview(Request $request){
+                   
+                   
+
+                   $rsub = $request->rname;
+                   $rmail = $request->rmail;
+                   $rmsg = $request->sms;
+
+                   $review = array();
+                   $review['product_id'] = Session::get('pid');
+                   $review['review_subject']= $rsub;
+                   $review['review_mail']= $rmail;
+                   $review['review_sms']= $rmsg;
+                  
+                   Mail::to($rmail)->send(new SendMail($rsub,$rmsg));
+                  
+                  $insert =  DB::table('tbl_review')
+                   ->insert($review);
+                   
+                   if($insert){
+                   
+                    return Redirect::to('/');
+                   }else{
+                
+                    return Redirect::to('/');
+                   }
+                   
+                     
+
+              }
+              
+              public function authcheck(){
+                $admin_id =Session::get('admin_id');
+                if($admin_id){
+                  return;
+                }else{
+                    return Redirect::to('/admin')->send();
+                }
+        
+        
+            }
 }

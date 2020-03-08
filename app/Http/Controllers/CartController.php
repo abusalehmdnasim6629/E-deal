@@ -29,7 +29,8 @@ class CartController extends Controller
     }
 
     public function show_cart(){
-
+        
+        $this->authcheck();
         $all_cart_info = DB::table('tbl_product')
                         ->where('publication_status',1)
                         ->first();
@@ -40,7 +41,16 @@ class CartController extends Controller
              ->with('pages.add_to_cart',$manage_cart);
     }
 
+    public function authcheck(){
+        $customer_id =Session::get('customer_id');
+        if($customer_id){
+          return;
+        }else{
+            return Redirect::to('/login-check')->send();
+        }
 
+
+    }
     public function delete_cart($id){
         Cart::remove($id);
         return Redirect::to('/show-cart');

@@ -28,12 +28,15 @@ Route::post('/update-cart/{id}','CartController@update_cart');
 //Checkout route...........
 Route::get('/login-check','CheckoutConteoller@login_check');
 Route::post('/customer-registration','CheckoutConteoller@customer_registration');
+Route::post('/customer-registration2','CheckoutConteoller@confirm_code');
 Route::post('/customer-login','CheckoutConteoller@customer_login');
 Route::get('/checkout','CheckoutConteoller@checkout');
 Route::get('/customer-logout','CheckoutConteoller@customer_logout');
 Route::post('/shipping','CheckoutConteoller@shipping');
 Route::get('/payment','CheckoutConteoller@payment');
 Route::post('/order-place','CheckoutConteoller@order_place');
+Route::get('/stripepayment','CheckoutConteoller@stripepayment');
+Route::post('/stripe','CheckoutConteoller@submit_payment');
 
 
 //backend route........ 
@@ -155,5 +158,8 @@ Route::get('/delete-link/{link_id}','AdminController@delete_link');
 Route::get('/add-contact','AdminController@add_email_phone');
 Route::post('/save-contact','AdminController@save_contact');
 Route::get('/all-contact','AdminController@all_contact');
+
+//Review
+Route::post('/send-review','AdminController@sendReview');
 
 

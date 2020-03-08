@@ -7,45 +7,114 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Cart;
 use Illuminate\Support\Facades\Validator;
-
+use App\Mail\SendMail;
+use Mail;
 use Session;
+//use Stripe;
+use Stripe;
+
+use RealRashid\SweetAlert\Facades\Alert;
 session_start();
 
 
 class CheckoutConteoller extends Controller
 {
+    public $cde;
     public function login_check(){
-
+        $this->authcheck3();
         return view('pages.login');
     }
 
    public function customer_registration(Request $request){
 
-                   
-
+              
+                
+               
+                
 
                 $cd= array();
                 
                 $cd['customer_name'] = $request->customer_name;
                 $cd['email_address']  = $request->email_address;
                 $cd['mobile_number']  = $request->mobile_number;
-                $cd['password']  = md5($request->password);
-                $customer_id = DB::table('tbl_customer')
-                    ->insertGetId($cd);
-
+                $cd['password']  = md5(md5($request->password));
+                Session::put('cus_info',$cd);
+                $rsub = "Registration Conformation Code";
+                $code = rand(10000,99999);
+                $rmsg ="Yor code is : ".$code;
+                Session::put('cd',$code);
+                Mail::to($cd['email_address'])->send(new SendMail($rsub,$rmsg));
+                
+                return view('pages.confirm_code');
+                //     $customer_id = DB::table('tbl_customer')
+                //     ->insertGetId($cd);
+                //   if($customer_id){
                   
-                Session::put('customer_id',$customer_id);
-                Session::put('customer_name',$request->customer_name);
-                return Redirect::to('/checkout');
-
+                //     Session::put('customer_id',$customer_id);
+                //     Session::put('customer_name',$request->customer_name);
+                //     Alert::success('Successful', 'Welcome to E-deal');
+                //     return Redirect::to('/checkout');
+                //   }else{
+                //     Alert::warning('Unsuccessful','Please try again');
+                //     return Redirect::to('/login-check');
+                //   }
+                   
+                
+            
                 
 
    }
-   public function checkout(){
+   
+   public function confirm_code(Request $request){
+           $code = Session::get('co');
+           
+           $input_code = $request->code;
 
+           if($code == $input_code){
+            $cd2 = array();
+            $cd2 = Session::get('cus_info');
+            $customer_id = DB::table('tbl_customer')
+                ->insertGetId($cd2);
+            
+              
+                Session::put('customer_id',$customer_id);
+                Session::put('customer_name',$cd2['customer_name']);
+                Alert::success('Successful', 'Welcome to E-deal');
+                return Redirect::to('/checkout');
+             
+            }else{
+                Alert::warning('Wrong','Please try again');
+                return Redirect::to('/login-check');
+            }
+
+   }
+   public function checkout(){
+        $this->authcheck();
         return view('pages.checkout');
 
    }
+
+   public function authcheck(){
+    $customer_id =Session::get('customer_id');
+    if($customer_id){
+      return;
+    }else{
+        return Redirect::to('/login-check')->send();
+    }
+
+   }
+   public function authcheck3(){
+    $customer_id =Session::get('customer_id');
+    if($customer_id){
+        return Redirect::to('/')->send();
+    }else{
+        return;
+    }
+
+   }
+
+
+
    public function shipping(Request $request)
    {
        $shipping_data = array();
@@ -82,10 +151,11 @@ class CheckoutConteoller extends Controller
 
             //     return Redirect()->back()->withErrors($validator)->withInput();
             // }
-    
+
+            
     
             $email = $request->email_address;
-            $password = md5($request->password);
+            $password = md5(md5($request->password));
             $customer_details = DB::table('tbl_customer')
                 ->where('email_address',$email)
                 ->where('password',$password)
@@ -95,6 +165,7 @@ class CheckoutConteoller extends Controller
             if($customer_details != NULL){
                 Session::put('customer_id',$customer_details->customer_id);
                 Session::put('customer_name',$customer_details->customer_name);
+                
                 return Redirect::to('/checkout');
             }else{
                 
@@ -113,11 +184,14 @@ class CheckoutConteoller extends Controller
     public function payment(){
         // return view('welcome')
         //        ->with('pages.payment');
+        $this->authcheck2();
         return view('pages.payment');
 
     }
+   
+   
     public function order_place(Request $request){
-
+        $this->authcheck2();
         $payment_method = $request->payment_method;
         $payment = array();
         $payment['payment_method'] = $payment_method;
@@ -133,6 +207,12 @@ class CheckoutConteoller extends Controller
         $odata['shipping_id'] = Session::get('shipping_id');
         $odata['payment_id'] =  $payment_id;
         
+       $remail =   DB::table('tbl_customer')
+                ->select('tbl_customer.email_address')
+                ->where('customer_id', $odata['customer_id'])
+                ->first();
+         $email = $remail->email_address;  
+
         $contents  = Cart::getcontent(); 
         foreach($contents as $to){
             $p = $to->price;
@@ -147,7 +227,9 @@ class CheckoutConteoller extends Controller
 
         } 
         $odata['order_total'] =  $sum;
+        $am = $sum;
         $odata['order_status'] =  'pendding';
+        if($odata['order_total'] > 200){
         $order_id = DB::table('tbl_order')
                     ->insertGetId($odata);
 
@@ -165,10 +247,17 @@ class CheckoutConteoller extends Controller
         }  
         if($payment_method == 'handcash'){
             Session::put('dis',null);
-            return view('pages.order_success');
+         
+            $rsub = "Order conformation";
+            $rmsg = "Your order has been received";
+            Mail::to($email)->send(new SendMail($rsub,$rmsg));
+            Alert::success('Order Conformation', 'Success');
+           
+
+            return Redirect::to('/');
         }elseif($payment_method == 'card'){
-            Session::put('dis',null);
-            return view('pages.order_success');
+            $this->authcheck2();
+            return view('pages.stripe_payment');
         }elseif($payment_method == 'bkash'){
             Session::put('dis',null);
             return view('pages.order_success');
@@ -177,13 +266,51 @@ class CheckoutConteoller extends Controller
             echo 'not match';
         }    
 
-
-        
-       
-
-
-
-
+       }else{
+        Alert::warning('Unsuccessfull', 'Please add product in your cart');
+        return Redirect::to('/');
+       }
 
     }
+    
+
+    public function stripepayment(){
+          $this->authcheck2();
+        return view('pages.stripe_payment');
+    }
+
+    public function submit_payment(Request $request){
+     
+    $usam = 200;
+
+    Stripe\Stripe::setApiKey('sk_test_ZpM0r4nXpKlO8XlWiFCimK2h00XpkztfYO');
+    
+    $a = Stripe\Charge::create ([
+                "amount" => $usam * 100,
+                "currency" => "usd",
+                "source" => $request->stripeToken,
+                "description" => "Test payment from itsolutionstuff.com." 
+        ]);
+
+    if($a){
+    Alert::success('Successful', 'Payment received successfully'); 
+    return Redirect::to('/');
+    }else{
+        Alert::warning('Unsuccessful', 'Payment fail'); 
+        return Redirect::back();   
+    }
+
 }
+public function authcheck2(){
+    $shipping_id =Session::get('shipping_id');
+    if($shipping_id){
+      return;
+    }else{
+        return Redirect::to('/checkout')->send();
+    }
+
+
+}
+}
+
+
